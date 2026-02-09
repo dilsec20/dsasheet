@@ -1,7 +1,8 @@
 import useStore from '../store/useStore'
 
 const Sidebar = () => {
-    const { topics, selectedTopic, setSelectedTopic, openModal } = useStore()
+    const { topics, selectedTopic, setSelectedTopic, openModal, getStats } = useStore()
+    const stats = getStats()
 
     const totalQuestions = topics.reduce((acc, t) => {
         return acc + t.questions.length + t.subTopics.reduce((a, st) => a + st.questions.length, 0)
@@ -15,6 +16,19 @@ const Sidebar = () => {
                 <p className="text-xs text-gray-400 mt-1">
                     {topics.length} steps • {totalQuestions} questions
                 </p>
+                {/* Mini Progress */}
+                <div className="mt-2">
+                    <div className="flex justify-between text-xs mb-1">
+                        <span className="text-gray-400">Progress</span>
+                        <span className="text-primary-400 font-semibold">{stats.percentage}%</span>
+                    </div>
+                    <div className="h-1.5 bg-dark-800 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full transition-all duration-500"
+                            style={{ width: `${stats.percentage}%` }}
+                        />
+                    </div>
+                </div>
             </div>
 
             {/* Add Topic Button */}
@@ -46,21 +60,39 @@ const Sidebar = () => {
                 </button>
 
                 {topics.map((topic) => {
-                    const count = topic.questions.length + topic.subTopics.reduce((a, st) => a + st.questions.length, 0)
+                    const topicStat = stats.byTopic.find(t => t.id === topic.id)
+                    const count = topicStat?.total || 0
+                    const solved = topicStat?.solved || 0
+                    const percentage = topicStat?.percentage || 0
+
                     return (
                         <button
                             key={topic.id}
                             onClick={() => setSelectedTopic(topic.id)}
-                            className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center justify-between group ${selectedTopic === topic.id
+                            className={`w-full text-left px-3 py-2 rounded-lg transition-colors group ${selectedTopic === topic.id
                                 ? 'bg-primary-500/20 text-primary-300 border border-primary-500/30'
                                 : 'text-gray-300 hover:bg-white/5'
                                 }`}
                         >
-                            <span className="text-sm truncate flex-1">{topic.name}</span>
-                            <span className={`text-xs px-1.5 py-0.5 rounded ${selectedTopic === topic.id ? 'bg-primary-500/30' : 'bg-white/10'
-                                }`}>
-                                {count}
-                            </span>
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm truncate flex-1">{topic.name}</span>
+                                <span className={`text-xs px-1.5 py-0.5 rounded ${percentage === 100
+                                        ? 'bg-green-500/30 text-green-300'
+                                        : selectedTopic === topic.id
+                                            ? 'bg-primary-500/30'
+                                            : 'bg-white/10'
+                                    }`}>
+                                    {solved}/{count}
+                                </span>
+                            </div>
+                            {/* Topic Progress Bar */}
+                            <div className="h-1 bg-dark-800 rounded-full overflow-hidden mt-1.5">
+                                <div
+                                    className={`h-full rounded-full transition-all duration-300 ${percentage === 100 ? 'bg-green-500' : 'bg-primary-500/70'
+                                        }`}
+                                    style={{ width: `${percentage}%` }}
+                                />
+                            </div>
                         </button>
                     )
                 })}
@@ -69,7 +101,7 @@ const Sidebar = () => {
             {/* Footer */}
             <div className="p-4 border-t border-white/10">
                 <p className="text-xs text-gray-500 text-center">
-                    Drag & drop to reorder
+                    {stats.solvedCount} / {stats.totalQuestions} solved
                 </p>
             </div>
         </aside>

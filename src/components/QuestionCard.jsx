@@ -20,7 +20,8 @@ const getDifficultyClass = (difficulty) => {
 }
 
 const QuestionCard = ({ question, index, topicId, subTopicId }) => {
-    const { openModal, openDeleteConfirm } = useStore()
+    const { openModal, openDeleteConfirm, toggleSolved, isQuestionSolved } = useStore()
+    const isSolved = isQuestionSolved(question.id)
 
     return (
         <Draggable draggableId={question.id} index={index}>
@@ -28,9 +29,27 @@ const QuestionCard = ({ question, index, topicId, subTopicId }) => {
                 <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    className={`group flex items-center gap-3 p-3 bg-dark-800/50 rounded-lg border border-white/5 hover:border-primary-500/30 transition-all duration-200 ${snapshot.isDragging ? 'dragging shadow-xl' : 'hover-lift'
-                        }`}
+                    className={`group flex items-center gap-3 p-3 rounded-lg border transition-all duration-200 ${isSolved
+                            ? 'bg-green-500/10 border-green-500/30'
+                            : 'bg-dark-800/50 border-white/5 hover:border-primary-500/30'
+                        } ${snapshot.isDragging ? 'dragging shadow-xl' : 'hover-lift'}`}
                 >
+                    {/* Solved Checkbox */}
+                    <button
+                        onClick={() => toggleSolved(question.id)}
+                        className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${isSolved
+                                ? 'bg-green-500 border-green-500 text-white'
+                                : 'border-gray-500 hover:border-primary-400'
+                            }`}
+                        title={isSolved ? 'Mark as unsolved' : 'Mark as solved'}
+                    >
+                        {isSolved && (
+                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        )}
+                    </button>
+
                     {/* Drag Handle */}
                     <div
                         {...provided.dragHandleProps}
@@ -49,7 +68,7 @@ const QuestionCard = ({ question, index, topicId, subTopicId }) => {
                     {/* Question Info */}
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                            <h5 className="text-sm font-medium text-gray-200 truncate">
+                            <h5 className={`text-sm font-medium truncate ${isSolved ? 'text-green-300 line-through opacity-70' : 'text-gray-200'}`}>
                                 {question.title}
                             </h5>
                             <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${getDifficultyClass(question.difficulty)}`}>
