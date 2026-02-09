@@ -1,6 +1,5 @@
-# 📚 Striver's A2Z DSA Sheet
-
-An interactive, modern web app to manage and track Striver's A2Z DSA Sheet questions with drag-and-drop reordering and full CRUD operations.
+# 📚 Interactive Question Management Sheet
+An interactive, modern web app to manage and track DSA questions with drag-and-drop reordering and full CRUD operations.
 
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite)
