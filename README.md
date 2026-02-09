@@ -11,11 +11,11 @@ An interactive, modern web app to manage and track DSA questions with drag-and-d
 
 - 📋 **456 Questions** across **18 Topics** - Complete A2Z DSA Sheet
 - ✅ **Progress Tracking** - Mark questions as solved (persists in localStorage!)
-- 🔍 **Search & Filter** - Find questions by name, difficulty, or status
+- 🔍 **Search & Filter** - Find questions by name, difficulty, or status {Extra Features}
 - 📊 **Stats Dashboard** - Track completion by difficulty and topic
 - 🔄 **Drag & Drop** - Reorder topics, subtopics, and questions
 - ➕ **Full CRUD** - Add, edit, delete at all levels
-- 💾 **Auto-Save** - Progress saved to localStorage
+- 💾 **Auto-Save** - Progress saved to localStorage {Extra features}
 - 📤 **Export/Import** - Backup and restore your progress
 - 🎨 **Premium UI** - Dark theme with glassmorphism
 - ⚡ **Live Data** - Fetches from Codolio API
